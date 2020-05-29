@@ -1,2 +1,2 @@
 # pygame-space-invaders
-Space Invader game written in Python 
+Space Invader (not the famous Space Invader) game written in Python 
