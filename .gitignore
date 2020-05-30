@@ -1,14 +1,13 @@
 __pycache__/
-resources/battleship128.png
-resources/battleship16.png
-resources/battleship24.png
-resources/battleship256.png
-resources/battleship32.png
-resources/battleship512.png
-resources/enemy128.png
-resources/enemy16.png
-resources/enemy24.png
-resources/enemy256.png
-resources/enemy32.png
-resources/enemy512.png
+src/resources/battleship128.png
+src/resources/battleship16.png
+src/resources/battleship256.png
+src/resources/battleship32.png
+src/resources/battleship512.png
+src/resources/enemy128.png
+src/resources/enemy16.png
+src/resources/enemy24.png
+src/resources/enemy256.png
+src/resources/enemy32.png
+src/resources/enemy512.png
 
