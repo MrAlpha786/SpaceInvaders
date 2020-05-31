@@ -1,13 +1,14 @@
 import sys
 import pygame
-from settings import Settings
-from game_stats import GameStats
-from scoreboard import ScoreBoard
-from button import Button
-from battleship import Ship
-from enemy import Enemy
-import functions as func
 from pygame.sprite import Group
+
+from modules.settings import Settings
+from modules.game_stats import GameStats
+from modules.scoreboard import ScoreBoard
+from modules.button import Button
+from modules.battleship import Ship
+from modules.enemy import Enemy
+import modules.functions as func
 
 
 def run_game():
