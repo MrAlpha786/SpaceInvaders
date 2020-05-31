@@ -40,14 +40,14 @@ def run_game():
     while True:
 
         # Watch for keyboard and mouse events.
-        func.check_events(ai_settings, screen, stats,
+        func.check_events(ai_settings, screen, stats, sb,
                           play_button, ship, enemies, bullets)
 
         if stats.game_active:
             ship.update()
             func.update_bullets(ai_settings, screen, stats,
                                 sb, ship, enemies, bullets)
-            func.update_enemies(ai_settings, stats, screen,
+            func.update_enemies(ai_settings, stats, sb, screen,
                                 ship, enemies, bullets)
 
         func.update_screen(ai_settings, screen, stats, sb, ship,

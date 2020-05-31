@@ -60,11 +60,14 @@ def check_fleet_edges(ai_settings, enemies):
             break
 
 
-def ship_hit(ai_settings, stats, screen, ship, enemies, bullets):
+def ship_hit(ai_settings, stats, sb, screen, ship, enemies, bullets):
     """Respond to ship bieng hit by enemy."""
     if stats.ships_left > 0:
         # Decrement ship_left.
         stats.ships_left -= 1
+
+        # Update Scoreboard.
+        sb.prep_ships()
 
         # Empty the list of enemies and bullets.
         enemies.empty()
@@ -82,27 +85,28 @@ def ship_hit(ai_settings, stats, screen, ship, enemies, bullets):
         pygame.mouse.set_visible(True)
 
 
-def check_enemies_bottom(ai_settings, stats, screen, ship, enemies, bullets):
+def check_enemies_bottom(ai_settings, stats, sb, screen, ship, enemies, bullets):
     """Check if any enemy have reached the bottom of the screen."""
     screen_rect = screen.get_rect()
     for enemy in enemies.sprites():
         if enemy.rect.bottom >= screen_rect.bottom:
             # Treat this the same as if the ship got hit.
-            ship_hit(ai_settings, stats, screen, ship, enemies, bullets)
+            ship_hit(ai_settings, stats, sb, screen, ship, enemies, bullets)
             break
 
 
-def update_enemies(ai_settings, stats, screen, ship, enemies, bullets):
+def update_enemies(ai_settings, stats, sb, screen, ship, enemies, bullets):
     """Check if the fleet is at an edge and then update the position of all enemies in the fleet."""
     check_fleet_edges(ai_settings, enemies)
     enemies.update()
 
     # Look for enemy-ship collisions.
     if pygame.sprite.spritecollideany(ship, enemies):
-        ship_hit(ai_settings, stats, screen, ship, enemies, bullets)
+        ship_hit(ai_settings, stats, sb, screen, ship, enemies, bullets)
 
     # Look for enemies hitting the bottom of the screen.
-    check_enemies_bottom(ai_settings, stats, screen, ship, enemies, bullets)
+    check_enemies_bottom(ai_settings, stats, sb,
+                         screen, ship, enemies, bullets)
 
 
 def fire_bullet(ai_settings, screen, ship, bullets):
@@ -136,7 +140,7 @@ def check_keyup_events(event, ship):
         ship.moving_left = False
 
 
-def check_events(ai_settings, screen, stats, play_button, ship, enemies, bullets):
+def check_events(ai_settings, screen, stats, sb, play_button, ship, enemies, bullets):
     """Respond to keypresses and mouse events."""
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -148,11 +152,11 @@ def check_events(ai_settings, screen, stats, play_button, ship, enemies, bullets
             check_keyup_events(event, ship)
         elif event.type == pygame.MOUSEBUTTONDOWN:
             mouse_x, mouse_y = pygame.mouse.get_pos()
-            check_play_button(ai_settings, screen, stats, play_button,
+            check_play_button(ai_settings, screen, stats, sb, play_button,
                               ship, enemies, bullets, mouse_x, mouse_y)
 
 
-def check_play_button(ai_settings, screen, stats, play_button,
+def check_play_button(ai_settings, screen, stats, sb, play_button,
                       ship, enemies, bullets, mouse_x, mouse_y):
     """Start a new game when player clicks Play."""
     button_clicked = play_button.rect.collidepoint(mouse_x, mouse_y)
@@ -166,6 +170,12 @@ def check_play_button(ai_settings, screen, stats, play_button,
         # Rest the game statistics.
         stats.reset_stats()
         stats.game_active = True
+
+        # Reset the scoreboard images.
+        sb.prep_score()
+        sb.prep_high_score()
+        sb.prep_level()
+        sb.prep_ships()
 
         # Empty the list of enemies and bullets.
         enemies.empty()
@@ -209,9 +219,14 @@ def check_bullet_enemy_collisions(ai_settings, screen, stats, sb, ship, enemies,
         check_high_score(stats, sb)
 
     if len(enemies) == 0:
-        # Destroy existing bullets and create new fleet
+        # If the fleet is destroyed, start a new level.
         bullets.empty()
         ai_settings.increae_speed()
+
+        # Increase level.
+        stats.level += 1
+        sb.prep_level()
+
         create_fleet(ai_settings, screen, ship, enemies)
 
 
