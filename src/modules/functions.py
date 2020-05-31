@@ -1,8 +1,9 @@
 import sys
 from time import sleep
 import pygame
-from bullets import Bullet
-from enemy import Enemy
+
+from .bullets import Bullet
+from .enemy import Enemy
 
 
 def get_number_enemies_x(ai_settings, enemy_width):

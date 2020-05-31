@@ -1,7 +1,7 @@
 import pygame.font
 from pygame.sprite import Group
 
-from battleship import Ship
+from .battleship import Ship
 
 
 class ScoreBoard():
