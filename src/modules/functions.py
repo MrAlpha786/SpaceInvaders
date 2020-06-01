@@ -1,7 +1,6 @@
 import sys
 from time import sleep
 import pygame
-
 from .bullets import Bullet
 from .enemy import Enemy
 
@@ -118,19 +117,30 @@ def fire_bullet(ai_settings, screen, ship, bullets):
         bullets.add(new_bullet)
 
 
-def check_keydown_events(event, ai_settings, screen, ship, bullets):
+def check_keydown_events(event, ai_settings, screen, stats, sb, ship, enemies, bullets):
     """Respond to keypresses."""
-    if event.key == pygame.K_RIGHT:
-        ship.moving_right = True
+    if stats.game_active:
+        if event.key == pygame.K_RIGHT:
+            ship.moving_right = True
 
-    elif event.key == pygame.K_LEFT:
-        ship.moving_left = True
+        elif event.key == pygame.K_LEFT:
+            ship.moving_left = True
 
-    elif event.key == pygame.K_SPACE:
-        fire_bullet(ai_settings, screen, ship, bullets)
+        elif event.key == pygame.K_SPACE:
+            fire_bullet(ai_settings, screen, ship, bullets)
 
-    elif event.key == pygame.K_q:
+    if event.key == pygame.K_q:
         sys.exit()
+
+    elif event.key == pygame.K_ESCAPE:
+        # Game Pause
+        if stats.game_active:
+            stats.game_active = False
+        elif stats.ships_left == 0:
+            activate_game(ai_settings, screen, stats,
+                          sb, ship, enemies, bullets)
+        else:
+            stats.game_active = True
 
 
 def check_keyup_events(event, ship):
@@ -148,7 +158,8 @@ def check_events(ai_settings, screen, stats, sb, play_button, ship, enemies, bul
             sys.exit()
 
         elif event.type == pygame.KEYDOWN:
-            check_keydown_events(event, ai_settings, screen, ship, bullets)
+            check_keydown_events(event, ai_settings,
+                                 screen, stats, sb, ship, enemies, bullets)
         elif event.type == pygame.KEYUP:
             check_keyup_events(event, ship)
         elif event.type == pygame.MOUSEBUTTONDOWN:
@@ -162,29 +173,34 @@ def check_play_button(ai_settings, screen, stats, sb, play_button,
     """Start a new game when player clicks Play."""
     button_clicked = play_button.rect.collidepoint(mouse_x, mouse_y)
     if button_clicked and not stats.game_active:
-        # Reset the game settings.
-        ai_settings.initialize_dynamic_settings()
+        activate_game(ai_settings, screen, stats, sb, ship, enemies, bullets)
 
-        # Hide the mouse cursor.
-        pygame.mouse.set_visible(False)
 
-        # Rest the game statistics.
-        stats.reset_stats()
-        stats.game_active = True
+def activate_game(ai_settings, screen, stats, sb, ship, enemies, bullets):
+    """Activate Game."""
+    # Reset the game settings.
+    ai_settings.initialize_dynamic_settings()
 
-        # Reset the scoreboard images.
-        sb.prep_score()
-        sb.prep_high_score()
-        sb.prep_level()
-        sb.prep_ships()
+    # Hide the mouse cursor.
+    pygame.mouse.set_visible(False)
 
-        # Empty the list of enemies and bullets.
-        enemies.empty()
-        bullets.empty()
+    # Rest the game statistics.
+    stats.reset_stats()
+    stats.game_active = True
 
-        # Create a new fleet and center the ship.
-        create_fleet(ai_settings, screen, ship, enemies)
-        ship.center_ship()
+    # Reset the scoreboard images.
+    sb.prep_score()
+    sb.prep_high_score()
+    sb.prep_level()
+    sb.prep_ships()
+
+    # Empty the list of enemies and bullets.
+    enemies.empty()
+    bullets.empty()
+
+    # Create a new fleet and center the ship.
+    create_fleet(ai_settings, screen, ship, enemies)
+    ship.center_ship()
 
 
 def update_screen(ai_settings, screen, stats, sb, ship, enemies, bullets, play_button):
@@ -222,7 +238,7 @@ def check_bullet_enemy_collisions(ai_settings, screen, stats, sb, ship, enemies,
     if len(enemies) == 0:
         # If the fleet is destroyed, start a new level.
         bullets.empty()
-        ai_settings.increae_speed()
+        ai_settings.increase_speed()
 
         # Increase level.
         stats.level += 1

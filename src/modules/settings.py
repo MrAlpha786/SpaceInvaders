@@ -39,7 +39,7 @@ class Settings:
         # Scoring
         self.enemy_points = 50
 
-    def increae_speed(self):
+    def increase_speed(self):
         """Increase speed settings enemy point values."""
         self.ship_speed_factor *= self.speedup_scale
         self.bullet_speed_factor *= self.speedup_scale

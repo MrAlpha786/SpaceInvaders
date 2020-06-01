@@ -1,7 +1,4 @@
 import pygame.font
-from pygame.sprite import Group
-
-from .battleship import Ship
 
 
 class ScoreBoard():
@@ -61,12 +58,8 @@ class ScoreBoard():
 
     def prep_ships(self):
         """Show how many ships are left."""
-        self.ships = Group()
-        for ship_number in range(self.stats.ships_left):
-            ship = Ship(self.ai_settings, self.screen)
-            ship.rect.x = 10 + ship_number * ship.rect.width
-            ship.rect.y = 10
-            self.ships.add(ship)
+        self.ship_image = pygame.image.load('resources/battleship32.png')
+        self.ship_rect = self.ship_image.get_rect()
 
     def show_score(self):
         """Draw scores and ships to the screen."""
@@ -75,4 +68,10 @@ class ScoreBoard():
         self.screen.blit(self.level_image, self.level_rect)
 
         # Draw ships
-        self.ships.draw(self.screen)
+        self.blit_ship()
+
+    def blit_ship(self):
+        for ship_number in range(self.stats.ships_left):
+            self.ship_rect.x = 20 + ship_number * (self.ship_rect.width + 10)
+            self.ship_rect.y = 20
+            self.screen.blit(self.ship_image, self.ship_rect)
