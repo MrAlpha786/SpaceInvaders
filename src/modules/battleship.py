@@ -16,11 +16,7 @@ class Ship(Sprite):
         self.screen_rect = screen.get_rect()
 
         # Start each new ship at the bottom center of the screen.
-        self.rect.centerx = self.screen_rect.centerx
-        self.rect.bottom = self.screen_rect.bottom
-
-        # Store a decimal value for the ship's center.
-        self.center = float(self.rect.centerx)
+        self.center_ship()
 
         # Movement flags
         self.moving_right = False
@@ -39,7 +35,9 @@ class Ship(Sprite):
 
     def center_ship(self):
         """Center the ship on the screen."""
-        self.center = self.screen_rect.centerx
+        self.rect.midbottom = self.screen_rect.midbottom
+        # Store a decimal value for the ship's center.
+        self.center = float(self.rect.centerx)
 
     def blitme(self):
         """Draw the ship at its current location."""
