@@ -15,13 +15,6 @@ class Enemy(Sprite):
         self.image = pygame.image.load('resources/enemy.png')
         self.rect = self.image.get_rect()
 
-        # Start each new enemy near the top left of the screen.
-        self.rect.x = self.rect.width
-        self.rect.y = self.rect.height
-
-        # Store enemy's exact position.
-        self.x = float(self.rect.x)
-
     def check_edges(self):
         """Return True if enemy is at the edge of the screen."""
         screen_rect = self.screen.get_rect()
