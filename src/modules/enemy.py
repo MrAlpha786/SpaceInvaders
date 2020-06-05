@@ -32,3 +32,5 @@ class Enemy(Sprite):
     def blitme(self):
         """Draw the enemy at its current location."""
         self.screen.blit(self.image, self.rect)
+
+

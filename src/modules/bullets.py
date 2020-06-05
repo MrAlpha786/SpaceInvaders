@@ -1,6 +1,6 @@
 import pygame
 from pygame.sprite import Sprite
-
+from pygame import mixer
 
 class Bullet(Sprite):
     """A class to manage bullets fired from the ship"""
@@ -20,6 +20,10 @@ class Bullet(Sprite):
 
         self.color = ai_settings.bullet_color
         self.speed_factor = ai_settings.bullet_speed_factor
+
+        # Play fire sound when bullet is fired
+        fire_sound = mixer.Sound('resources/fire.wav')
+        fire_sound.play()
 
     def update(self):
         """Move the bullet up the screeen."""

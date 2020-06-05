@@ -1,6 +1,7 @@
 import sys
 from time import sleep
 import pygame
+from pygame import mixer
 from .bullets import Bullet
 from .enemy import Enemy
 
@@ -230,6 +231,8 @@ def check_bullet_enemy_collisions(ai_settings, screen, stats, sb, ship, enemies,
     collisions = pygame.sprite.groupcollide(bullets, enemies, True, True)
 
     if collisions:
+        explosion = mixer.Sound('resources/explosion.wav')
+        explosion.play()
         for enemies in collisions.values():
             stats.score += ai_settings.enemy_points * len(enemies)
             sb.prep_score()
