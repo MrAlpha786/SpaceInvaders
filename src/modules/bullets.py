@@ -22,6 +22,7 @@ class Bullet(Sprite):
 
         # Play fire sound when bullet is fired
         fire_sound = pygame.mixer.Sound('resources/fire.wav')
+        fire_sound.play()
 
     def update(self):
         """Move the bullet up the screeen."""
