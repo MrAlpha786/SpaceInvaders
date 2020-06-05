@@ -1,8 +1,8 @@
 import sys
 from time import sleep
 import pygame
-from .bullets import Bullet
-from .enemy import Enemy
+from modules.bullets import Bullet
+from modules.enemy import Enemy
 
 
 def get_number_enemies_x(ai_settings, enemy_width):
@@ -231,11 +231,7 @@ def check_bullet_enemy_collisions(ai_settings, screen, stats, sb, ship, enemies,
     if collisions:
         for enemies in collisions.values():
             stats.score += ai_settings.enemy_points * len(enemies)
-
-            for i in range(9):
-                ex.explosion_rect[i].center = enemies[0].rect.center
-
-            ex.explode = True
+            animate_explosion(ex, enemies[-1])
             sb.prep_score()
         check_high_score(stats, sb)
         ex.sound.play()
@@ -251,6 +247,12 @@ def check_bullet_enemy_collisions(ai_settings, screen, stats, sb, ship, enemies,
 
         create_fleet(ai_settings, screen, ship, enemies)
 
+
+def animate_explosion(ex, enemy):
+    for i in range(9):
+        ex.explosion_rect[i].center = enemy.rect.center
+
+    ex.explode = True
 
 def update_bullets(ai_settings, screen, stats, sb, ship, enemies, ex, bullets):
     """Update position of bullets and get rid of old bullets."""

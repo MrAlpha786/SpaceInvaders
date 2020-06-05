@@ -1,4 +1,3 @@
-import sys
 import pygame
 from pygame.sprite import Group
 
@@ -7,7 +6,6 @@ from modules.game_stats import GameStats
 from modules.scoreboard import ScoreBoard
 from modules.button import Button
 from modules.battleship import Ship
-from modules.enemy import Enemy
 from modules.explosion import Explosion
 import modules.functions as func
 
