@@ -8,6 +8,7 @@ from modules.scoreboard import ScoreBoard
 from modules.button import Button
 from modules.battleship import Ship
 from modules.enemy import Enemy
+from modules.explosion import Explosion
 import modules.functions as func
 
 
@@ -19,7 +20,7 @@ def run_game():
     screen = pygame.display.set_mode(
         (ai_settings.screen_width, ai_settings.screen_height))
     pygame.display.set_caption("Space Invaders")
-    icon = pygame.image.load('resources/battleship24.png')
+    icon = pygame.image.load('resources/battleship32.png')
     pygame.display.set_icon(icon)
 
     # Make a play button.
@@ -33,6 +34,7 @@ def run_game():
     ship = Ship(ai_settings, screen)
     bullets = Group()
     enemies = Group()
+    ex = Explosion(ai_settings, screen)
 
     # Create a fleet of enemies.
     func.create_fleet(ai_settings, screen, ship, enemies)
@@ -47,12 +49,12 @@ def run_game():
         if stats.game_active:
             ship.update()
             func.update_bullets(ai_settings, screen, stats,
-                                sb, ship, enemies, bullets)
+                                sb, ship, enemies, ex, bullets)
             func.update_enemies(ai_settings, stats, sb, screen,
                                 ship, enemies, bullets)
 
         func.update_screen(ai_settings, screen, stats, sb, ship,
-                           enemies, bullets, play_button)
+                           enemies, ex, bullets, play_button)
 
 
 run_game()

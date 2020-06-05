@@ -66,9 +66,6 @@ def ship_hit(ai_settings, stats, sb, screen, ship, enemies, bullets):
         # Decrement ship_left.
         stats.ships_left -= 1
 
-        # Update Scoreboard.
-        sb.prep_ships()
-
         # Empty the list of enemies and bullets.
         enemies.empty()
         bullets.empty()
@@ -192,7 +189,6 @@ def activate_game(ai_settings, screen, stats, sb, ship, enemies, bullets):
     sb.prep_score()
     sb.prep_high_score()
     sb.prep_level()
-    sb.prep_ships()
 
     # Empty the list of enemies and bullets.
     enemies.empty()
@@ -203,7 +199,7 @@ def activate_game(ai_settings, screen, stats, sb, ship, enemies, bullets):
     ship.center_ship()
 
 
-def update_screen(ai_settings, screen, stats, sb, ship, enemies, bullets, play_button):
+def update_screen(ai_settings, screen, stats, sb, ship, enemies, ex, bullets, play_button):
     """Update images on the screen and flip to the new screen."""
     # Redraw the screen during each pass through the loop.
     screen.fill(ai_settings.bg_color)
@@ -216,6 +212,9 @@ def update_screen(ai_settings, screen, stats, sb, ship, enemies, bullets, play_b
     # Draw the score information.
     sb.show_score()
 
+    if ex.explode:
+        ex.blit()
+
     # Draw the play button if the game is inactive.
     if not stats.game_active:
         play_button.draw_button()
@@ -224,7 +223,7 @@ def update_screen(ai_settings, screen, stats, sb, ship, enemies, bullets, play_b
     pygame.display.flip()
 
 
-def check_bullet_enemy_collisions(ai_settings, screen, stats, sb, ship, enemies, bullets):
+def check_bullet_enemy_collisions(ai_settings, screen, stats, sb, ship, enemies, ex, bullets):
     """ Respond to bullet-enemy collisions."""
     # Remove any bullet and enemy that have collided.
     collisions = pygame.sprite.groupcollide(bullets, enemies, True, True)
@@ -232,8 +231,14 @@ def check_bullet_enemy_collisions(ai_settings, screen, stats, sb, ship, enemies,
     if collisions:
         for enemies in collisions.values():
             stats.score += ai_settings.enemy_points * len(enemies)
+
+            for i in range(9):
+                ex.explosion_rect[i].center = enemies[0].rect.center
+
+            ex.explode = True
             sb.prep_score()
         check_high_score(stats, sb)
+        ex.sound.play()
 
     if len(enemies) == 0:
         # If the fleet is destroyed, start a new level.
@@ -247,7 +252,7 @@ def check_bullet_enemy_collisions(ai_settings, screen, stats, sb, ship, enemies,
         create_fleet(ai_settings, screen, ship, enemies)
 
 
-def update_bullets(ai_settings, screen, stats, sb, ship, enemies, bullets):
+def update_bullets(ai_settings, screen, stats, sb, ship, enemies, ex, bullets):
     """Update position of bullets and get rid of old bullets."""
     # Update bullet position.
     bullets.update()
@@ -258,7 +263,7 @@ def update_bullets(ai_settings, screen, stats, sb, ship, enemies, bullets):
             bullets.remove(bullet)
 
     check_bullet_enemy_collisions(
-        ai_settings, screen, stats, sb, ship, enemies, bullets)
+        ai_settings, screen, stats, sb, ship, enemies, ex, bullets)
 
 
 def check_high_score(stats, sb):
