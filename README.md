@@ -13,12 +13,12 @@ Space Invader game written in Python
 key    | Action
 :-----:|:--------------:
 left   |  move left
-rigjt  |  move right
+right  |  move right
 space  |  fire bullet
 q      |  quit
 ESC    |  pause/play
 
 # Screenshots
-![preview1](Pic1.png)
+![preview1](Pic1.PNG)
 
-![preview2](Pic2.png)
+![preview2](Pic2.PNG)
