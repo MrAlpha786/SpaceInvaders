@@ -2,6 +2,7 @@
 Space Invader game written in Python 
 
 ### created by [MrAlpha786](https://github.com/MrAlpha786)
+### contributed by [Laraib07](https://github.com/laraib07)
 
 # Requirements
 
